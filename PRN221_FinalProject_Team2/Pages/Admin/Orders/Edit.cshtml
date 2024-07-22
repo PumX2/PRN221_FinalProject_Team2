@@ -1,0 +1,100 @@
+﻿@page
+@model PRN221_FinalProject_Team2.Pages.Admin.Orders.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<h1>Edit</h1>
+<hr />
+<div class="row">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Order.OrderId" />
+        <div class="form-group">
+            <label asp-for="Order.CustomerId" class="control-label"></label>
+            <input asp-for="Order.CustomerId" class="form-control" readonly />
+            <span asp-validation-for="Order.CustomerId" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Order.OrderDate" class="control-label"></label>
+            <input asp-for="Order.OrderDate" class="form-control" readonly />
+            <span asp-validation-for="Order.OrderDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Order.RequiredDate" class="control-label"></label>
+            <input asp-for="Order.RequiredDate" class="form-control" readonly />
+            <span asp-validation-for="Order.RequiredDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Order.ShippedDate" class="control-label"></label>
+            <input asp-for="Order.ShippedDate" class="form-control" />
+            <span asp-validation-for="Order.ShippedDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Order.Freight" class="control-label"></label>
+            <input asp-for="Order.Freight" class="form-control"  />
+            <span asp-validation-for="Order.Freight" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Order.ShipName" class="control-label"></label>
+            <input asp-for="Order.ShipName" class="form-control" readonly />
+            <span asp-validation-for="Order.ShipName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Order.ShipAddress" class="control-label"></label>
+            <input asp-for="Order.ShipAddress" class="form-control"  />
+            <span asp-validation-for="Order.ShipAddress" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Order.ShipCity" class="control-label"></label>
+            <input asp-for="Order.ShipCity" class="form-control" />
+            <span asp-validation-for="Order.ShipCity" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Order.ShipRegion" class="control-label"></label>
+            <input asp-for="Order.ShipRegion" class="form-control" readonly />
+            <span asp-validation-for="Order.ShipRegion" class="text-danger"></span>
+        </div>
+       
+        <div class="form-group">
+            <label asp-for="Order.ShipCountry" class="control-label"></label>
+            <input asp-for="Order.ShipCountry" class="form-control" readonly />
+            <span asp-validation-for="Order.ShipCountry" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+<script>
+
+    $.validator.methods.range = function (value, element, param) {
+        var globalizedValue = value.replace(",", ".");
+        return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+    }
+
+    $.validator.methods.number = function (value, element) {
+        return this.optional(element) || /-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+    }
+    //Date dd/MM/yyyy
+    $.validator.methods.date = function (value, element) {
+        var date = value.split("/");
+        return this.optional(element) || !/Invalid|NaN/.test(new Date(date[2], date[1], date[0]).toString());
+    }
+</script>
+

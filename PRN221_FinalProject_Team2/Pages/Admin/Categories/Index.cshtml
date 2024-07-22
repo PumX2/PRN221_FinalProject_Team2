@@ -1,0 +1,45 @@
+﻿@page
+@model PRN221_FinalProject_Team2.Pages.Admin.Categories.IndexModel
+@{
+}
+
+<h1 class="text-center">Manage Category</h1>
+
+<p>
+	<a class="btn btn-primary float-end" asp-page="Create">Create New</a>
+</p>
+
+@if (TempData["Exist"] != null)
+{
+	<span class="text-danger">@TempData["Exist"]</span>
+}
+
+@if (TempData["Success"] != null)
+{
+	<span class="text-success">@TempData["Success"]</span>
+}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var item in Model.Categories)
+		{
+			<tr>
+				<td>@item.CategoryId</td>
+				<td>@item.CategoryName</td>
+				<td>@item.Description</td>
+				<td>
+					<a class="btn btn-success" asp-page="./Edit" asp-route-id="@item.CategoryId">Edit</a> |
+					<a class="btn btn-danger" asp-page="./Index" asp-page-handler="Delete" asp-route-id="@item.CategoryId">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PRN221_FinalProject_Team2</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PRN221_FinalProject_Team2.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 ml-auto">
+                        <li class="nav-item">
+
+                        </li>
+
+                        @{
+                            string? admin = Context.Session.GetString("admin");
+                            string? customer = Context.Session.GetString("customer");
+                            string? email = Context.Session.GetString("email");
+
+
+                        }
+                        @if (customer != null || customer != null)
+                        {
+                            if (customer != null)
+                            {
+                                string? cart = Context.Session.GetString("cart");
+                                List<CartItem> cartItem = new List<CartItem>();
+                                cartItem = JsonSerializer.Deserialize<List<CartItem>>(cart);
+                                int cartnum = 0;
+                                if (cartItem != null)
+                                {
+                                    cartnum = cartItem.Count();
+                                }
+
+                                <li class="nav-item"><a class="nav-link text-light" asp-area="" asp-page="/Member/Orders/Index">Order</a></li>
+
+                                <li class="nav-item"><a class="nav-link text-light" asp-area="" asp-page="/Cart"><span class="text-danger">(@cartnum)</span>Cart</a></li>
+
+
+
+                            }
+
+                            <li class="nav-link text-light" style="margin-left: 600px"><a asp-page="/Logout">Logout</a></li>
+                        }
+                        @if (admin == null && customer == null)
+                        {
+                            @*<li class="nav-item">
+                        <a class="nav-link text-light" asp-page="/Sigup" style="margin-left: 200px">Register</a>
+                        </li>*@
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="./Login" style="margin-left: 800px">Login</a>
+                            </li>
+
+                        }
+                        @if (admin != null || customer != null)
+                        {
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Welcome @email
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" href="EditProfile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="Logout">Logout</a></li>
+                                </ul>
+                            </div>
+
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @*<footer class="border-top footer text-muted">
+    <div class="container">
+    &copy; 2023 - PRN221_FinalProject_Team2 - <a asp-area="" asp-page="/Privacy">Privacy</a>
+
+    </div>
+    </footer>*@
+    <footer class="text-center text-lg-start text-dark"
+            style="background-color: #ECEFF1">
+        <!-- Section: Social media -->
+        <section class="d-flex justify-content-between p-4 text-white"
+                 style="background-color: darkslategrey">
+            <!-- Left -->
+            <div class="me-5" style="height:5px">
+                <span>Group 2</span>
+            </div>
+            <!-- Left -->
+            <!-- Right -->
+            <div>
+                <a href="" class="text-white me-4">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="" class="text-white me-4">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="" class="text-white me-4">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a href="" class="text-white me-4">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="" class="text-white me-4">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="" class="text-white me-4">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <!-- Right -->
+        </section>
+        <!-- Section: Social media -->
+        <!-- Section: Links  -->
+        <!-- Section: Links  -->
+        <!-- Copyright -->
+        <div class="text-center p-3"
+             style="background-color: rgba(0, 0, 0, 0.2)">
+            © 2020 Copyright:
+            <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <style>
+
+    </style>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

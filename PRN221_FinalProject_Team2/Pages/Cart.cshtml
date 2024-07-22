@@ -1,0 +1,68 @@
+﻿@page
+@model PRN221_FinalProject_Team2.Pages.CartModel
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Cart</h1>
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-info">
+                @TempData["msg"]
+            </div>
+        }
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>ProductId</th>
+                    <th>ProductName</th>
+                    <th>UnitPrice</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.cartItems)
+                {
+                    <tr>
+                        <td>@item.ProductId</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.UnitPrice</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-secondary" asp-page="Cart" asp-route-id="@item.ProductId" asp-page-handler="Minus">-</a>
+                            @item.Quantity
+                            <a class="btn btn-sm btn-outline-secondary" asp-page="Cart" asp-route-id="@item.ProductId" asp-page-handler="Add">+</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-danger" asp-page="Cart" asp-route-id="@item.ProductId" asp-page-handler="Delete">Delete</a>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="3"></td>
+                    <td>Total Price:</td>
+                    <td>@Model.totalPrice</td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td>
+                        <a class="btn btn-success @(Model.totalPrice == 0 ? "disabled" : "")" asp-page="Checkout" asp-route-totalPrice="@Model.totalPrice">Check Out</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

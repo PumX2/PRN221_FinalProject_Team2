@@ -1,0 +1,120 @@
+﻿@page
+@model PRN221_FinalProject_Team2.Pages.Admin.Orders.IndexModel
+@{
+	var selectedPage = Model.Page;
+	var numberPage = Model.NumberPage;
+	var search = ViewBag.Search;
+}
+
+<h1 class="text-center">Manage Order</h1>
+
+<div class="d-flex float-end">
+	<form method="get" class="d-flex">
+		<div class="form-group">
+			<input class="form-control" placeholder="Enter customer ID..." type="text" name="keyword" value="@Model.CustomerID" />
+		</div>
+		<div class="form-group">
+			<input class="btn btn-primary" type="submit" value="Search" />
+		</div>
+	</form>
+
+	
+</div>
+
+
+@if (TempData["Exist"] != null)
+{
+	<span class="text-danger">@TempData["Exist"]</span>
+}
+
+@if (TempData["Success"] != null)
+{
+	<span class="text-success">@TempData["Success"]</span>
+}
+
+@if (Model.Orders.Count != 0)
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Customer Id</th>
+				<th>Customer name</th>
+				<th>OrderDate</th>
+				<th>Shipped Date</th>
+				<th>Ship Address</th>
+				
+				
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.Orders)
+			{
+				<tr>
+					<td>@item.OrderId</td>
+					<td>@item.CustomerId</td>
+					<td>@item.Customer.ContactName</td>
+					<td>@item.OrderDate</td>
+					<td>@item.ShippedDate</td>
+					<td>@item.ShipAddress</td>
+					
+				
+					<td>
+						<a class="btn btn-success" asp-page="./Edit" asp-route-id="@item.OrderId">Edit</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<h2 class="text-center">No products found...</h2>
+}
+
+
+@if (Model.Orders.Count != 0)
+{
+	<div class="mt-2">
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				@if (string.IsNullOrEmpty(search))
+				{
+					<li class="page-item @(selectedPage == 1 ? "disabled" : "") mr-5">
+						<a class="page-link btn btn-primary btn-lg @(selectedPage == 1 ? "disabled" : "")" asp-page="Index" asp-route-pageIndex="1" aria-disabled="true" role="button">First</a>
+					</li>
+					<li class="page-item @(selectedPage == 1 ? "disabled" : "")">
+						<a class="page-link btn btn-primary btn-lg @(selectedPage == 1 ? "disabled" : "")" asp-page="Index" asp-route-pageIndex="@(selectedPage - 1)" aria-disabled="true" role="button">Previous</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link btn btn-primary btn-lg" aria-disabled="true" role="button">@selectedPage/@numberPage</a>
+					</li>
+					<li class="page-item @(selectedPage == numberPage ? "disabled" : "")">
+						<a class="page-link btn btn-primary btn-lg @(selectedPage == numberPage ? "disabled" : "")" asp-page="Index" asp-route-pageIndex="@(selectedPage + 1)" aria-disabled="true" role="button">Next</a>
+					</li>
+					<li class="page-item @(selectedPage == numberPage ? "disabled" : "")">
+						<a class="page-link btn btn-primary btn-lg @(selectedPage == numberPage ? "disabled" : "")" asp-page="Index" asp-route-pageIndex="@numberPage" aria-disabled="true" role="button">Last</a>
+					</li>
+				}
+				else
+				{
+					<li class="page-item @(selectedPage == 1 ? "disabled" : "") mr-5">
+						<a class="page-link btn btn-primary btn-lg @(selectedPage == 1 ? "disabled" : "")" asp-page="Index" asp-route-pageIndex="1" asp-route-keyword="@search" aria-disabled="true" role="button">First</a>
+					</li>
+					<li class="page-item @(selectedPage == 1 ? "disabled" : "")">
+						<a class="page-link btn btn-primary btn-lg @(selectedPage == 1 ? "disabled" : "")" asp-page="Index" asp-route-pageIndex="@(selectedPage - 1)" asp-route-keyword="@search" aria-disabled="true" role="button">Previous</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link btn btn-primary btn-lg" aria-disabled="true" role="button">@selectedPage/@numberPage</a>
+					</li>
+					<li class="page-item @(selectedPage == numberPage ? "disabled" : "")">
+						<a class="page-link btn btn-primary btn-lg @(selectedPage == numberPage ? "disabled" : "")" asp-page="Index" asp-route-pageIndex="@(selectedPage + 1)" asp-route-keyword="@search" aria-disabled="true" role="button">Next</a>
+					</li>
+					<li class="page-item @(selectedPage == numberPage ? "disabled" : "")">
+						<a class="page-link btn btn-primary btn-lg @(selectedPage == numberPage ? "disabled" : "")" asp-page="Index" asp-route-pageIndex="@numberPage" asp-route-keyword="@search" aria-disabled="true" role="button">Last</a>
+					</li>
+				}
+			</ul>
+		</nav>
+	</div>
+}

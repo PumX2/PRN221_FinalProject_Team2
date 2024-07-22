@@ -1,0 +1,45 @@
+﻿@page
+@model PRN221_FinalProject_Team2.Pages.Admin.Users.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+<h1 class="text-center">List of Users</h1>
+<p>
+    <a class="btn btn-primary float-end"  asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Role)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Account)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modeItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modeItem => item.Role)
+                </td>
+                <td>
+                    <a class="btn btn-success" asp-page="./Edit" asp-route-id="@item.AccountId">Edit</a> |
+                    <a class="btn btn-primary" asp-page="./Details" asp-route-id="@item.AccountId">Details</a> |
+                    <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.AccountId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

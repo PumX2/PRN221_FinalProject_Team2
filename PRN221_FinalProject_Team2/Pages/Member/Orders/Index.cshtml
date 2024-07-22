@@ -1,0 +1,163 @@
+﻿@page
+@model PRN221_FinalProject_Team2.Pages.Member.Orders.IndexModel
+
+<h2 class="text-center mb-4">Order History</h2>
+@{
+    if (TempData["excaption"] != null)
+    {
+        <span class="text-danger">@TempData["excaption"]</span>
+    }
+}
+<form method="get" onsubmit="return validateDates()" class="mb-4">
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="startDate" class="col-form-label">Start orderdate:</label>
+        </div>
+        <div class="col-auto">
+            <input name="d1" type="date" class="form-control" value="@Model.StartDate" id="startDate" />
+        </div>
+        <div class="col-auto">
+            <label for="endDate" class="col-form-label">End orderdate:</label>
+        </div>
+        <div class="col-auto">
+            <input name="d2" type="date" class="form-control" value="@Model.EndDate" id="endDate" />
+        </div>
+        <div class="col-auto">
+            <input type="submit" class="btn btn-primary" value="Filter" />
+        </div>
+    </div>
+</form>
+<script>
+    function validateDates() {
+        var startDate = document.getElementsByName("d1")[0].value;
+        var endDate = document.getElementsByName("d2")[0].value;
+
+        var startYear = parseInt(startDate.substring(0, 4));
+        var endYear = parseInt(endDate.substring(0, 4));
+
+        if ((startYear < 1754 && startYear != 0) || startYear > 9999) {
+            alert("Invalid year for Start Date. Please enter a year greater than 1753 and less than 9999.");
+            return false;
+        }
+
+        if ((endYear < 1754 && endYear != 0) || endYear > 9999) {
+            alert("Invalid year for End Date. Please enter a year greater than 1753 and less than 9999.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>OrderId</th>
+            <th>Order Date</th>
+            <th>Required Date</th>
+            <th>Shipped Date</th>
+            <th>Freight</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.orders)
+        {
+            var orderDetails = Model.orderdetail.Where(x => x.OrderId == @item.OrderId).ToList();
+            <tr>
+                <td>
+                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapse-@item.OrderId" role="button" aria-expanded="false" aria-controls="collapse-@item.OrderId">
+                        Order Id: @item.OrderId
+                    </a>
+                </td>
+                <td>@item.OrderDate?.ToString("dd-MM-yyyy")</td>
+                <td>@item.RequiredDate?.ToString("dd-MM-yyyy")</td>
+                <td>@item.ShippedDate?.ToString("dd-MM-yyyy")</td>
+                <td>@item.Freight</td>
+                <td>
+                    @if (item.ShippedDate.HasValue)
+                    {
+                        if (item.ShippedDate <= item.RequiredDate)
+                        {
+                            <span class="badge bg-success">Shipped</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Shipped Late</span>
+                        }
+                    }
+                    else
+                    {
+                        if (item.RequiredDate < DateTime.Today)
+                        {
+                            <span class="badge bg-danger">Out of Date</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-info">Shipping</span>
+                        }
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="collapse" id="collapse-@item.OrderId">
+                        <table class="table table-bordered">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>OrderId</th>
+                                    <th>Product Id</th>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var it in orderDetails)
+                                {
+                                    <tr>
+                                        <td>@item.OrderId</td>
+                                        <td>@it.ProductId</td>
+                                        <td>@it.Product.ProductName</td>
+                                        <td>@it.UnitPrice</td>
+                                        <td>@it.Quantity</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var selectedPage = Model.Page;
+    var numberPage = Model.NumberPage;
+    var stdate = @Model.StartDate;
+    var edate = @Model.EndDate;
+}
+@if (Model.orders.Count != 0)
+{
+    <div class="mt-4">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(selectedPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-page="Index" asp-route-d1="@stdate" asp-route-d2="@edate" asp-route-pageIndex="1" aria-disabled="true">First</a>
+                </li>
+                <li class="page-item @(selectedPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-page="Index" asp-route-d1="@stdate" asp-route-d2="@edate" asp-route-pageIndex="@(selectedPage - 1)" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link">@selectedPage/@numberPage</a>
+                </li>
+                <li class="page-item @(selectedPage == numberPage ? "disabled" : "")">
+                    <a class="page-link" asp-page="Index" asp-route-d1="@stdate" asp-route-d2="@edate" asp-route-pageIndex="@(selectedPage + 1)" aria-disabled="true">Next</a>
+                </li>
+                <li class="page-item @(selectedPage == numberPage ? "disabled" : "")">
+                    <a class="page-link" asp-page="Index" asp-route-d1="@stdate" asp-route-d2="@edate" asp-route-pageIndex="@numberPage" aria-disabled="true">Last</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+}

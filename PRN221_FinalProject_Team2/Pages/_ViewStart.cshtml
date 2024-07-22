@@ -1,0 +1,21 @@
+﻿@using System.Text.Json;
+@{
+    var userData = Context.Session.GetString("Account");
+    if (userData != null)
+    {
+        var user = JsonSerializer.Deserialize<Account>(userData);
+        if (user.Role == 2)
+        {
+            Layout = "_Layout";
+        }
+        else
+        {
+            Layout = "Employee";
+        }
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+   
+}

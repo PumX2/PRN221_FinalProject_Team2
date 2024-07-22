@@ -1,0 +1,230 @@
+﻿@page
+@model PRN221_FinalProject_Team2.Pages.SearchModel
+@{
+    var listProduct = Model.products;
+    var pageSelected = Model.page;
+    var numberPage = Model.numberPage;
+    var url = Model.url;
+    var listcategory = Model.categories;
+    ViewData["Title"] = "Search Page";
+}
+<link rel="stylesheet" href="https://code.jquery.com/jquery-3.6.0.min.js">
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+<!-- Css Styles -->
+<link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="~/css/animate.min.css" type="text/css">
+<link rel="stylesheet" href="~/css/aos.css" type="text/css">
+<link rel="stylesheet" href="~/css/bootstrap-icons.css" type="text/css">
+<link rel="stylesheet" href="~/css/boxicons.min.css" type="text/css">
+<link rel="stylesheet" href="~/css/glightbox.min.css" type="text/css">
+<link rel="stylesheet" href="~/css/swiper-bundle.min.css" type="text/css">
+<link href="~/css/site.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link rel="stylesheet" href="~/css/style.css" type="text/css">
+
+<h1 class="text-center">Search Page</h1>
+<div class="d-flex justify-content-center">
+    <span class="cart-message">@TempData["cartmsg"]</span>
+</div>
+<div class="d-flex justify-content-center align-items-center mb-4">
+    <form method="get" class="search-form">
+        <div class="form-group">
+            <label>Min price</label>
+            <input name="min" asp-for="search.min" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Max price</label>
+            <input name="max" asp-for="search.max" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Category</label>
+            <select name="categoryId" asp-items="@ViewBag.Category" class="form-control">
+                <option value="">None</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Search" class="btn btn-primary search-button" />
+        </div>
+    </form>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        @foreach (var product in listProduct)
+        {
+            <div class="col-md-3 text-center mb-5">
+                <div class="product-card">
+                    <div class="product-card-img">
+                        <label class="stock bg-success">In Stock</label>
+                        <img src="@product.ImageUrl" alt="@product.ProductName">
+                    </div>
+                    <div class="product-card-body">
+                        <h5 class="product-name">
+                            <a href="Detail?id=@product.ProductId">@product.ProductName</a>
+                        </h5>
+                        <div>
+                            <span class="selling-price">$@(Math.Round(product.UnitPrice.Value, 2))</span>
+                        </div>
+                        <div class="mt-2">
+                            <button><a class="align-content-center" style="text-decoration: none" href="Detail?id=@product.ProductId">Detail</a></button>
+                            <button><a class="align-content-center" style="text-decoration: none" asp-page-handler="AddToCart" asp-route-pageindex="@pageSelected" asp-route-pid="@product.ProductId">Add to Cart</a></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (listProduct.Count != 0)
+    {
+        <nav aria-label="Page navigation example" class="mt-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(pageSelected == 1 ? "disabled" : "")">
+                    <a class="page-link" href="@(url + 1)">First</a>
+                </li>
+                <li class="page-item @(pageSelected == 1 ? "disabled" : "")">
+                    <a class="page-link" href="@(url + (pageSelected - 1))">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link disabled">@pageSelected/@numberPage</a>
+                </li>
+                <li class="page-item @(pageSelected == numberPage ? "disabled" : "")">
+                    <a class="page-link" href="@(url + (pageSelected + 1))">Next</a>
+                </li>
+                <li class="page-item @(pageSelected == numberPage ? "disabled" : "")">
+                    <a class="page-link" href="@(url + numberPage)">Last</a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>
+
+<!-- Js Plugins -->
+<script src="~/js/aos.js"></script>
+<script src="~/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/glightbox.min.js"></script>
+<script src="~/js/isotope.pkgd.min.js"></script>
+<script src="~/js/validate.js"></script>
+<script src="~/js/swiper-bundle.min.js"></script>
+
+<!-- Styles -->
+<style>
+    .search-button {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 20px;
+        font-weight: 600;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 50px;
+        transition: background-color 0.3s, transform 0.3s;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+    }
+
+        .search-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+            text-decoration: none;
+        }
+
+        .search-button:focus,
+        .search-button:active {
+            background-color: #004494;
+            transform: scale(1);
+            outline: none;
+            text-decoration: none;
+        }
+
+    .cart-message {
+        color: forestgreen;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    a:hover {
+        color: red;
+        text-decoration: none;
+    }
+
+    .product-card {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        margin-bottom: 24px;
+        position: relative;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .product-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card a {
+            text-decoration: none;
+        }
+
+        .product-card .stock {
+            position: absolute;
+            color: #fff;
+            border-radius: 4px;
+            padding: 2px 12px;
+            margin: 8px;
+            font-size: 12px;
+            top: 8px;
+            left: 8px;
+        }
+
+        .product-card .product-card-img {
+            height: 260px;
+            overflow: hidden;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f8f8;
+        }
+
+            .product-card .product-card-img img {
+                height: 100%;
+                width: 100%;
+            }
+
+        .product-card .product-card-body {
+            padding: 10px 10px;
+        }
+
+            .product-card .product-card-body .product-name {
+                font-size: 20px;
+                font-weight: 600;
+                color: #000;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            .product-card .product-card-body .selling-price {
+                font-size: 22px;
+                color: #000;
+                font-weight: 600;
+                margin-right: 8px;
+            }
+
+            .product-card .product-card-body .btn1 {
+                border: 1px solid;
+                margin-right: 3px;
+                border-radius: 0px;
+                font-size: 12px;
+                margin-top: 10px;
+            }
+</style>

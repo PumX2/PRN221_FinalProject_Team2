@@ -1,0 +1,252 @@
+﻿@page
+@model PRN221_FinalProject_Team2.Pages.Admin.Dashboard.IndexModel
+@{
+}
+
+<form method="get" class="float-end d-flex">
+        <div class="form-group">
+            <input class="form-control" placeholder="Enter year..." type="number" name="year" value="@(ViewBag.Year == null ? DateTime.Now.Year : ViewBag.Year)" />
+        </div>
+        <div class="form-group">
+            <input class="btn btn-primary" type="submit" value="Search" />
+        </div>
+</form>
+<br/>
+<div class="text-center mt-5">
+    <div class="card">
+        <div class="card-header">Top revenue</div>
+        <div class="chart-container">
+            <canvas id="bar-chart-revenue" width="100" height="300"></canvas>
+        </div>
+    </div>
+</div>
+<br />
+<div class="text-center mt-5">
+    <div class="card">
+        <div class="card-header">Top 10 most sold products of all time</div>
+        <div class="chart-container">
+            <canvas id="bar-chart-quantity" width="100" height="300"></canvas>
+        </div>
+    </div>
+</div>  
+<br />
+<div class="text-center mt-5">
+    <div class="card">
+        <div class="card-header">Top 10 most revenue products of all time</div>
+        <div class="chart-container">
+            <canvas id="bar-chart-total" width="100" height="300"></canvas>
+        </div>
+    </div>
+</div>  
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<script>
+    var Count = [];
+    var Products = [];
+    @if (Model.listQuantity.Count > 0)
+    {
+        foreach (var item in Model.listQuantity)
+        {
+            @:Count.push(@item.Count);
+            @:Products.push('@item.Name');
+        }
+    }
+
+        var Product = {
+        label: "Quantity",
+        data: Count,
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1,
+        lineTension: 0,
+    };
+    var datasetvalues = {
+        labels: Products, // x-axis label values
+        datasets: [Product] // y-axis
+    };
+    barChartOptions = {
+        indexAxis: 'x',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                text: ''
+            }
+        },
+        scales: {
+            x: {
+                barPercentage: 1,
+                categoryPercentage: 0.6,
+            },
+            y: {
+                barPercentage: 1,
+                categoryPercentage: 0.6,
+                ticks: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+    var verticalBarChart = new Chart(
+        document.getElementById('bar-chart-quantity').getContext('2d'), {
+        type: 'bar',
+        data: datasetvalues,
+        options: barChartOptions
+    });
+</script>
+
+<script>
+    var Total = [];
+    var Products = [];
+    @if (Model.listPrice.Count > 0)
+    {
+        foreach (var item in Model.listPrice)
+        {
+            @:Total.push(@item.Total);
+            @:Products.push('@item.Name');
+        }
+    }
+
+        var Product = {
+        label: "Revenue",
+        data: Total,
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1,
+        lineTension: 0,
+    };
+    var datasetvalues = {
+        labels: Products, // x-axis label values
+        datasets: [Product] // y-axis
+    };
+    barChartOptions = {
+        indexAxis: 'x',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                text: ''
+            }
+        },
+        scales: {
+            x: {
+                barPercentage: 1,
+                categoryPercentage: 0.6,
+            },
+            y: {
+                barPercentage: 1,
+                categoryPercentage: 0.6,
+                ticks: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+    var verticalBarChart = new Chart(
+        document.getElementById('bar-chart-total').getContext('2d'), {
+        type: 'bar',
+        data: datasetvalues,
+        options: barChartOptions
+    });
+</script>
+
+<script>
+    var Total = [];
+    var Months = [];
+    @if (Model.listRevenue.Count > 0)
+    {
+        foreach (var item in Model.listRevenue)
+        {
+            @:Total.push(@item.Total);
+            @:Months.push('@item.Month');
+        }
+    }
+
+            var Month = {
+        label: "Revenue",
+        data: Total,
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1,
+        lineTension: 0,
+    };
+    var datasetvalues = {
+        labels: Months, // x-axis label values
+        datasets: [Month] // y-axis
+    };
+    barChartOptions = {
+        indexAxis: 'x',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                text: ''
+            }
+        },
+        scales: {
+            x: {
+                barPercentage: 1,
+                categoryPercentage: 0.6,
+            },
+            y: {
+                barPercentage: 1,
+                categoryPercentage: 0.6,
+                ticks: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+    var verticalBarChart = new Chart(
+        document.getElementById('bar-chart-revenue').getContext('2d'), {
+        type: 'bar',
+        data: datasetvalues,
+        options: barChartOptions
+    });
+</script>

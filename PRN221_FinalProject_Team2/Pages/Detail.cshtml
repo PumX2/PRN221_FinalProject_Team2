@@ -1,0 +1,93 @@
+﻿@page
+@model PRN221_FinalProject_Team2.Pages.DetailModel
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .product-details {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .product-details h1 {
+                margin-bottom: 20px;
+            }
+
+            .product-details .row {
+                margin-bottom: 10px;
+            }
+
+            .product-details .btn-primary {
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+
+            .product-details .btn-secondary {
+                background-color: #6c757d;
+                border-color: #6c757d;
+            }
+
+            .product-details .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004085;
+            }
+
+            .product-details .btn-secondary:hover {
+                background-color: #5a6268;
+                border-color: #545b62;
+            }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="product-details">
+            <h1>Product Details</h1>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Product.ProductName)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Product.ProductName)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Product.QuantityPerUnit)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Product.QuantityPerUnit)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Product.UnitPrice)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Product.UnitPrice)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Product.UnitsInStock)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Product.UnitsInStock)
+                </dd>
+            </dl>
+            <div class="buttons mt-3">
+                <a class="btn btn-primary" asp-page-handler="AddToCart" asp-route-id="@Model.Product.ProductId" style="text-decoration: none; color: white;">Add to Cart</a>
+                <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
